@@ -6,48 +6,42 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
+      # item quality adjustments
+      case item.name
+      when /Conjured/
+        item.quality -= 2 if item.quality > 0
+      when "Aged Brie"
+        item.quality += 2 if item.quality < 50
+      when "Backstage passes to a TAFKAL80ETC concert"
+        if item.sell_in <= 0
+          item.quality = 0
+        elsif item.sell_in <= 5
+          if item.quality + 3 <= 50
+            item.quality += 3
+          else # 48, 49
+            item.quality = 50
           end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
+        elsif item.sell_in <= 10
+          if item.quality + 2 <= 50
+            item.quality += 2
+          else # 49
+            item.quality = 50
           end
         else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
+          item.quality += 1 if item.quality < 50
         end
+      else
+        if item.name != "Sulfuras, Hand of Ragnaros"
+          # normal quality decrease
+          item.quality -= 1 if item.quality > 0
+          # past sell by quality decrease
+          item.quality -= item.quality if item.sell_in < 0
+        end
+      end
+
+      # decrement item sell_in
+      if item.name != "Sulfuras, Hand of Ragnaros"
+        item.sell_in = item.sell_in - 1
       end
     end
   end

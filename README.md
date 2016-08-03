@@ -51,3 +51,13 @@ one-shot you as he doesn't believe in shared code ownership.
 Just for clarification, an item can never have its quality increase above 50,
 however "Sulfuras" is a legendary item and as such its quality is 80 and it
 never alters.
+
+## My Solution: [gilded_rose.rb](ruby/gilded_rose.rb)
+
+The logic in the original update quality method was fairly hard to follow with all the separate conditional statements. I felt that it overcomplicated the logic you were presenting in this readme. Instead of using three separate conditional statements, I combine the logic into one case statement. This allows to treat each item on a case by case basis, creating separate logic for the item quality. We also have a catch all for all standard items that decrease in quality incrementally.
+
+I found this way of encapsulating the logic much easier to work with. I also noticed some errors in the original logic for the backstage passes. It was not incrementing by the correct amount when within 10 days and within 5 days.
+
+After quality is adjusted we move to decrementing the sell_in. Of course none of this applies to Sulfuras so it's quality never changes.
+
+I enjoyed working on this exercise. It was interesting taking the web of conditionals and simplifying it with a case statement making it easier to follow in my opinion. Hope you like it, thanks!
